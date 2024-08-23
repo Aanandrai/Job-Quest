@@ -4,14 +4,13 @@ import {User} from "../models/user.model.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 
 export const register= asyncHandler(async (req,res)=>{
-
     const {fullName ,email, phoneNumber , password , role }=req.body 
  
     if(
         [fullName, email, phoneNumber, password ,role].some((field)=>
         field?.trim()=="" || field?.trim()==undefined)
     ){
-        throw new ApiError(400, "All field are required")
+        throw new ApiError(400,"All Fields are required")
     }
    
 
@@ -21,15 +20,14 @@ export const register= asyncHandler(async (req,res)=>{
         throw new ApiError(400,"User already exist")
     }
    
-
-    const user=await User.create({
+    const user=new User({
         fullName,
         email,
         phoneNumber,
         password,
         role
     })
-    
+    user.save()
 
     return res.status(201).json(new ApiResponse(201, user, "User registered successfully"))
 
