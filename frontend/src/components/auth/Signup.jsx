@@ -9,6 +9,9 @@ import { USER_API_END_POINT } from '../../utils/constant'
 
 import axios from 'axios'
 import { toast } from 'sonner'
+import { useDispatch, useSelector } from 'react-redux'
+import { setLoading } from '../../redux/authSlice'
+import { Loader2 } from 'lucide-react'
 
 export const Signup = () => {
 
@@ -21,8 +24,11 @@ export const Signup = () => {
         role:"",
         file:""
     })
-
+    // const {loading}=useSelector(store=>store.auth)
+    const loading=useSelector(state=>state.loading)
+    console.log(loading)
     const navigate=useNavigate()
+    const dispatch=useDispatch()
     
     const changeEventHandler=(e)=>{
         setInput({...input, [e.target.name]:e.target.value})
@@ -39,6 +45,7 @@ export const Signup = () => {
         //     className: 'text-sm p-4 shadow-lg animate-bounce !text-gray-100 !bg-[#344367] ',
         //     duration: 3000
         // })
+        dispatch(setLoading(true))
 
         const formData=new FormData()
 
@@ -70,7 +77,8 @@ export const Signup = () => {
                     className: 'text-sm p-4 shadow-lg !text-white !bg-[#344367] ',
                     duration: 3000
                 })
-            })      
+            })
+            .finally(()=>{dispatch(setLoading(false))})
     }
     
 
@@ -165,9 +173,11 @@ export const Signup = () => {
 
             </div>
             </div>
-
+            {
+                loading? <Button className="w-full my-4"><Loader2 className="mr-2 h-4 w-4 animate-spin"/>Please wait </Button>:<Button type="submit" className="w-full my-4">Sign Up</Button>
+            }
         
-            <Button type="submit" className="w-full my-4">Sign Up</Button>
+            
             <span className="text-sm">Already have an account? <Link to="/login" className="text-blue-600">Login</Link></span>
 
 
