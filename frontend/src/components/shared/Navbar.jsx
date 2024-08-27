@@ -35,8 +35,8 @@ export const Navbar = () => {
           {/* Right part of Navbar  */}
           <div className="flex items-center gap-[2.3vw] mr-[6vw]">
             <ul className="flex font-medium items-center gap-[6vw] mr-[3vw] cursor-pointer ">
-              <li>Home</li>
-              <li>Jobs</li>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/Jobs">Jobs</Link></li>
               <li>Browse</li>
             </ul>
 
