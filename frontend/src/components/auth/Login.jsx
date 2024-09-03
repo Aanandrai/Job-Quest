@@ -6,11 +6,12 @@ import { RadioGroup } from "../ui/radio-group"
 import { Button } from '../ui/button'
 import { Link, useNavigate } from 'react-router-dom'
 import { USER_API_END_POINT } from '../../utils/constant'
+import {setUser} from "../../redux/authSlice"
 
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
-import { setLoading } from '../../redux/authSlice'
+import { setLoading } from '../../redux/loadingSlice'
 import { Loader2 } from 'lucide-react'
 
 
@@ -23,7 +24,9 @@ export const Login = () => {
         role:"",
     })
 
-    const {loading}=useSelector(store=>store.auth)
+    // const {loading}=useSelector(store=>store.loading)
+    const loading=useSelector(state=>state.loading)
+    
     const navigate=useNavigate()
     const dispatch=useDispatch()
 
@@ -44,13 +47,17 @@ export const Login = () => {
             withCredentials:true
         })
             .then((res)=>{
+              
+                dispatch(setUser(res.data.data))
                 navigate("/")
+               
                 toast.success(res.data.message,{
                     className: 'text-sm p-4 shadow-lg animate-bounce!text-gray-900 !bg-blue-100',
                     duration: 3000
                 })
             })
             .catch((error)=>{
+               
                 toast.error(error.response?.data.message,{
                     className: 'text-sm p-4 shadow-lg !text-white !bg-[#344367] ',
                     duration: 3000

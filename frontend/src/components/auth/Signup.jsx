@@ -10,7 +10,7 @@ import { USER_API_END_POINT } from '../../utils/constant'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
-import { setLoading } from '../../redux/authSlice'
+import { setLoading } from '../../redux/loadingSlice'
 import { Loader2 } from 'lucide-react'
 
 export const Signup = () => {

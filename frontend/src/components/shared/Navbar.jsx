@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { useSelector } from 'react-redux'
 import {
     Popover,
     PopoverContent,
@@ -17,8 +18,8 @@ import { Link } from 'react-router-dom'
 
 export const Navbar = () => {
 
-  
-  const user=false
+  // const {user}=useSelector(store=>store.auth)
+  const user=useSelector(state=>state.user)
 
   return (
     <>
@@ -37,7 +38,7 @@ export const Navbar = () => {
             <ul className="flex font-medium items-center gap-[6vw] mr-[3vw] cursor-pointer ">
               <li><Link to="/">Home</Link></li>
               <li><Link to="/Jobs">Jobs</Link></li>
-              <li>Browse</li>
+              <li><Link to="/Browse">Browse</Link></li>
             </ul>
 
             {
@@ -73,7 +74,7 @@ export const Navbar = () => {
 
                     <div className="cursor-pointer flex w-fit items-center gap-2">
                     <User2/>
-                      <Button variant="link"> View profile</Button>
+                      <Button variant="link"><Link to="/profile"> View profile</Link></Button>
                       
                     </div>
 
