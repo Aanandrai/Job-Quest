@@ -25,8 +25,7 @@ export const Signup = () => {
         file:""
     })
     // const {loading}=useSelector(store=>store.auth)
-    const loading=useSelector(state=>state.loading)
-    console.log(loading)
+    const {loading}=useSelector(state=>state.loading)
     const navigate=useNavigate()
     const dispatch=useDispatch()
     

@@ -18,14 +18,14 @@ import { Link } from 'react-router-dom'
 
 export const Navbar = () => {
 
-  // const {user}=useSelector(store=>store.auth)
-  const user=useSelector(state=>state.user)
+ 
+  const {user}=useSelector(state=>state.auth)
 
   return (
     <>
 
     <div className="bg-white">
-      <div className="flex justify-between items-center mx-auto max-w-7xl h-16 ml-[3vw] mr-[4vw] ">
+      <div className="flex justify-between items-center px-10 py-5">
 
           {/* //left part of Navbar */}
           <div>  

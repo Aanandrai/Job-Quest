@@ -3,12 +3,10 @@ import loadingSlice from "./loadingSlice";
 import authSlice from "./authSlice";
 
 const store=configureStore({
-    // reducer:{
-    //     auth:authSlice,
-    //     loading:loadingSlice 
-    // }
-    reducer:loadingSlice,
-    reducer:authSlice
+    reducer:{
+        auth:authSlice,
+        loading:loadingSlice 
+    }
 })
 
 export default store

@@ -24,8 +24,9 @@ export const Login = () => {
         role:"",
     })
 
-    // const {loading}=useSelector(store=>store.loading)
-    const loading=useSelector(state=>state.loading)
+    const {loading}=useSelector(state=>state.loading)
+    const {user}=useSelector(state=>state.auth)
+  
     
     const navigate=useNavigate()
     const dispatch=useDispatch()
@@ -47,8 +48,10 @@ export const Login = () => {
             withCredentials:true
         })
             .then((res)=>{
-              
+                
                 dispatch(setUser(res.data.data))
+                console.log(user)
+                console.log(user)
                 navigate("/")
                
                 toast.success(res.data.message,{
@@ -62,6 +65,7 @@ export const Login = () => {
                     className: 'text-sm p-4 shadow-lg !text-white !bg-[#344367] ',
                     duration: 3000
                 })
+                console.log(error)
             })
             .finally(()=>{dispatch(setLoading(false))})
             
