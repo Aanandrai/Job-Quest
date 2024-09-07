@@ -7,14 +7,17 @@ import { Badge } from '../ui/badge'
 import { Label } from '../ui/label'
 import { AppliedJobTable } from './AppliedJobTable'
 import { UpdateProfileDialog } from './UpdateProfileDialog'
+import { useSelector } from 'react-redux'
 
 
-const skills=['html', 'Java', 'C++',"C"]
+
 const isResume=true
 
 export const Profile = () => {
 
     const [open, setOpen]=useState(false)
+    const {user}=useSelector(state=>state.auth)
+   
 
   return (
     <div>
@@ -30,8 +33,8 @@ export const Profile = () => {
 
                     <div>
 
-                        <h1 className="font-medium text-xl">Full Name</h1>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing</p>
+                        <h1 className="font-medium text-xl">{user?.fullName}</h1>
+                        <p>{user?.profile.bio}</p>
                     </div>
 
                 </div>
@@ -43,14 +46,14 @@ export const Profile = () => {
             <div className="my-5">
                 <div className="flex items-center gap-3">
                     <Mail/>
-                    <span>xyz@gmail.com</span>
+                    <span>{user?.email}</span>
 
                 </div>
 
                 <div className="flex items-center gap-3 my-2">
                     
                     <Contact/>
-                    <span>8080808080</span>
+                    <span>{user?.phoneNumber}</span>
 
                 </div>
             </div>
@@ -61,7 +64,7 @@ export const Profile = () => {
                 <div className="flex items-center gap-1 my-2">
 
                 {
-                    skills.length!=0 ? skills.map((item,index)=>(<Badge key={index} className="text-sm py-[10px] "> {item}</Badge>)):(<span>Na</span>)
+                    user?.profile?.skills.length!=0 ? user?.profile?.skills.map((item,index)=>(<Badge key={index} className="text-sm py-[10px] "> {item}</Badge>)):(<span>Na</span>)
                     
                 }
 
@@ -70,9 +73,11 @@ export const Profile = () => {
 
 
             <div className="grid w-full max-w-sm items-center gap-1.5">
+            
                 <Label className="text-md font-bold">Resume</Label>
+                
                 {
-                    isResume? <a target="blank" href="https://youtube.com/@patelmernstack" className="text-blue-500 w-full hover:underline cursor-pointer text-sm">Click to open</a>:<span>Na</span>
+                    isResume? <a target="_blank" href={`${user?.profile?.resume}`} className="text-blue-500 w-full hover:underline cursor-pointer text-sm">{user?.profile?.resumeOriginalName} </a>:<span>Na</span>
                 }
 
             </div>

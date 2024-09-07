@@ -2,6 +2,7 @@ import {asyncHandler} from "../utils/asyncHandler.js"
 import {ApiError} from "../utils/ApiError.js"
 import {User} from "../models/user.model.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 export const register= asyncHandler(async (req,res)=>{
     const {fullName ,email, phoneNumber , password , role }=req.body 
@@ -19,14 +20,45 @@ export const register= asyncHandler(async (req,res)=>{
     if(existUser){
         throw new ApiError(400,"User already exist")
     }
+
+    let photoLocalPath=null
+  
+
+    if(req.files && Array.isArray(req.files.file)&& (req.files.file.length > 0)){
+       
+        photoLocalPath=req.files.file[0].path
+    }
    
-    const user=new User({
+
+    let p=null
+    if(photoLocalPath!=null){
+        p=await uploadOnCloudinary(photoLocalPath,"profilePhoto")
+    }
+    
+   
+    const userData={
         fullName,
         email,
         phoneNumber,
         password,
-        role
-    })
+        role,
+        profile:{}
+    }
+
+    if(p){
+        userData.profile.profilePhoto=p.secure_url
+    }
+
+
+    // const user=new User({
+    //     fullName,
+    //     email,
+    //     phoneNumber,
+    //     password,
+    //     role
+    // })
+
+    const user=new User(userData)
     user.save()
 
     return res.status(201).json(new ApiResponse(201, user, "User registered successfully"))
@@ -86,16 +118,44 @@ export const updateProfile=asyncHandler(async(req,res)=>{
 
 
     // here cloudinary for photo upload 
-    const {skills , ...restOfBody}=req.body
+    const {skills,bio , ...restOfBody}=req.body
     const userId=req.user // by middleware authentication
+
+    const existingUser = await User.findById(userId);
+    if (!existingUser) {
+        throw new ApiError(404, "User not found");
+    }
+
+   
    
 
     if(skills){
         const skillsArray = skills.split(",").map(skill => skill.trim());
-       
-        restOfBody.profile = restOfBody.profile || {};
-        restOfBody.profile.skills = skillsArray;
+
+        restOfBody.profile = existingUser.profile || {}
+        restOfBody.profile.skills = skillsArray
+        restOfBody.profile.bio=bio
     }
+
+    let photoLocalPath=null
+  
+
+    if(req.files && Array.isArray(req.files.file)&& (req.files.file.length > 0)){
+       
+        photoLocalPath=req.files.file[0].path
+    }
+   
+
+    let p=null
+    if(photoLocalPath!=null){
+        p=await uploadOnCloudinary(photoLocalPath,"resume",)
+       
+        restOfBody.profile = restOfBody.profile || existingUser.profile || {}
+        restOfBody.profile.resume=p.url
+        console.log(restOfBody)
+        restOfBody.profile.resumeOriginalName=p.originalName
+    }
+    
 
     
 
@@ -111,6 +171,8 @@ export const updateProfile=asyncHandler(async(req,res)=>{
     if(!updatedUser){
         throw new ApiError(404, "User not found")
     }
+
+    updatedUser.password=undefined
 
     
 

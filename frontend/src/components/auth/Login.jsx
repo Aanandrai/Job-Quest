@@ -50,8 +50,7 @@ export const Login = () => {
             .then((res)=>{
                 
                 dispatch(setUser(res.data.data))
-                console.log(user)
-                console.log(user)
+               
                 navigate("/")
                
                 toast.success(res.data.message,{

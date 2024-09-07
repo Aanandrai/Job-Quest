@@ -1,18 +1,28 @@
 import express from "express"
 import { login, logout, register, updateProfile } from "../controllers/user.controller.js"
 import { isAuthenticated } from "../middlewares/auth.middleware.js"
-import { singleUpload } from "../middlewares/multer.js"
+import { upload } from "../middlewares/multer.js"
 
 const router=express.Router()
 
 router.route("/register")
-        .post(singleUpload, register)
+        .post(upload.fields(
+                [{
+                    name:"file",
+                    maxcount:1
+                }]
+            ), register)
 
 router.route("/login")
         .post(login)
 
 router.route("/profile/update")
-        .put(isAuthenticated ,updateProfile)
+        .put(isAuthenticated, upload.fields(
+                [{
+                    name:"file",
+                    maxcount:1
+                }]
+            ) , updateProfile)
 
 router.route("/logout")
         .get(isAuthenticated ,logout)
